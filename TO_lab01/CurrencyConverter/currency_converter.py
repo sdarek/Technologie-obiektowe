@@ -1,4 +1,6 @@
 from CurrencyConverter.currency_data import CurrencyData
+from decimal import Decimal
+
 
 class CurrencyConverter:
     _instance = None
@@ -29,6 +31,9 @@ class CurrencyConverter:
         if source_currency is None or target_currency is None:
             raise ValueError("Nie znaleziono odpowiednich walut")
 
-        # Oblicz przeliczoną kwotę
-        converted_amount = amount * (source_currency.get_exchange_rate() / target_currency.get_exchange_rate())
+        # Oblicz przeliczoną kwotę z użyciem modułu decimal
+        source_exchange_rate = source_currency.get_exchange_rate()
+        target_exchange_rate = target_currency.get_exchange_rate()
+        amount = Decimal(str(amount))
+        converted_amount = (amount * Decimal(source_exchange_rate)) / Decimal(target_exchange_rate)
         return round(converted_amount, self.precision)

@@ -5,16 +5,22 @@ import pickle
 class CurrencyData():
 
     def __init__(self, url):
-        self.currencies = ExchangeRateProvider.download_currencies(url=url)
         self.url = url
         self.filename = "currencies"
-        self.add_currency(Currency("Złoty Polski", 1, "PLN", 1.00))
+        self.update_currencies()
+
+    def __init__(self, url):
+        self.url = url
+        self.filename = "currencies"
+        self.currencies = ExchangeRateProvider.download_currencies(url=url)
 
     def add_currency(self, currency: Currency):
-        self.currencies.append(currency)
+        if currency not in self.currencies:
+            self.currencies.append(currency)
 
     def update_currencies(self):
-        self.__init__(self.url)
+        self.currencies = ExchangeRateProvider.download_currencies(self.url)
+        self.add_currency(Currency("Złoty Polski", 1, "PLN", 1.00))
         print("Lista walut została zaktualizowana")
         
 

@@ -4,7 +4,7 @@ import os
 
 class Menu():
     def __init__(self):
-        os.system("clear")
+        os.system("cls")
         self.choice = None
         self.currencyData = CurrencyData("https://www.nbp.pl/kursy/xml/lasta.xml")
         self.converter = CurrencyConverter()
@@ -23,28 +23,28 @@ class Menu():
                 self.choice = int(input("Twój wybór: "))
                 self.make_decision()
             except ValueError:
-                os.system("clear")
+                os.system("cls")
                 print("Nieprawidłowa opcja. Wybierz ponownie.")
     
     def make_decision(self):
         if self.choice == 1:
-            os.system("clear")
+            os.system("cls")
             self.show_currencies()
         elif self.choice == 2:
             self.convert_currencies()
         elif self.choice == 3:
-            os.system("clear")
+            os.system("cls")
             self.save_currencies()
         elif self.choice == 4:
-            os.system("clear")
+            os.system("cls")
             self.update_currencies()
         elif self.choice == 5:
-            os.system("clear")
+            os.system("cls")
             self.load_currencies_local()
         elif self.choice == 6:
             exit()
         else:
-            os.system("clear")
+            os.system("cls")
             print("Nieprawidłowa opcja. Wybierz ponownie.")
 
     def show_currencies(self):
@@ -64,7 +64,7 @@ class Menu():
 
         try:
             targetVal = self.converter.convert(sourceVal, sourceCode, targetCode, self.currencyData)
-            os.system("clear")
+            os.system("cls")
             print(f"{sourceVal} {sourceCode} = {targetVal} {targetCode}")
         except ValueError as e:
             print(f"Błąd konwersji: {e}")
