@@ -1,13 +1,15 @@
 from CurrencyConverter.currency_data import CurrencyData
 from CurrencyConverter.currency_converter import CurrencyConverter
+from CurrencyConverter.data_operations import DataOperations
 import os
 
 class Menu():
     def __init__(self):
         os.system("cls")
         self.choice = None
-        self.currencyData = CurrencyData("https://www.nbp.pl/kursy/xml/lasta.xml")
+        self.currencyData = CurrencyData()
         self.converter = CurrencyConverter()
+        self.dataOper = DataOperations("https://www.nbp.pl/kursy/xml/lasta.xml", "currencies")
     
     def show_menu(self):
 
@@ -61,23 +63,29 @@ class Menu():
         sourceVal = float(input("Podaj wartość początkową [float]: "))
         sourceCode = str(input("Podaj kod waluty początkowej [str]: ")).upper()
         targetCode = str(input("Podaj kod waluty docelowej [str]: ")).upper()
-
         try:
-            targetVal = self.converter.convert(sourceVal, sourceCode, targetCode, self.currencyData)
-            os.system("cls")
-            print(f"{sourceVal} {sourceCode} = {targetVal} {targetCode}")
+            sourceCurrency = self.currencyData.get_currency_by_code(sourceCode)
+            targetCurrency = self.currencyData.get_currency_by_code(targetCode)
+
+            if sourceCurrency is None or targetCurrency is None:
+                os.system("cls")
+                print("Nieprawidłowe kody walut. Spróbuj ponownie.")
+            else:
+                convertedValue = self.converter.convert(sourceVal, sourceCurrency, targetCurrency)
+                os.system("cls")
+                print(f"{sourceVal} {sourceCode} = {convertedValue} {targetCode}")
         except ValueError as e:
+            os.system("cls")
             print(f"Błąd konwersji: {e}")
 
-
     def update_currencies(self):
-        self.currencyData.update_currencies()
+        self.dataOper.update_currencies(self.currencyData)
 
     def save_currencies(self):
-        self.currencyData.save_currencies()
+        self.dataOper.save_currencies(self.currencyData)
 
     def load_currencies_local(self):
-        self.currencyData.load_currencies()
+        self.currencyData.currencies = self.dataOper.load_currencies()
 
         
 
